@@ -116,21 +116,26 @@
             form.append('file',apple);
             form.append('width',$('input[name=width]').val());
             form.append('height',$('input[name=height]').val());
-            $.ajax({
-                url: '/ajax_save',
-                type: 'POST',
-                data: form,
-                processData: false,
-                contentType: false,
-                success: function(data){
-                  if(data.status){
-                      console.log(data);
-                      $('#result').append('<h3>'+data.width+' x '+data.height+'縮圖</h3><img src="/src/'+data.filename+'">');
-                  } else {
-                      alert(data.msg);
-                  }
-                }
-            });
+            if($('input[name=width]').val() == '' || $('input[name=height]').val() == ''){
+                alert('請輸入長寬');
+            } else{
+                $.ajax({
+                    url: '/ajax_save',
+                    type: 'POST',
+                    data: form,
+                    processData: false,
+                    contentType: false,
+                    success: function(data){
+                      if(data.status){
+                          console.log(data);
+                          $('#result').append('<h3>'+data.width+' x '+data.height+'縮圖</h3><img src="/src/'+data.filename+'">');
+                      } else {
+                          alert(data.msg);
+                      }
+                    }
+                });
+            }
+
         });
         function dataURItoBlob(dataURI) {
             // convert base64/URLEncoded data component to raw binary data held in a string
