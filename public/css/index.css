@@ -14,7 +14,7 @@ body {
 }
 
 #btn1 {
-    background: #81d5fa;
+    background: #FFFFFF;
     width: 280px;
     padding: 4px 0;
     position: absolute;
@@ -58,4 +58,7 @@ p {
     font-family: 'Roboto';
     font-size: 1.6em;
     font-weight: bold;
+}
+.todo{
+    color: #81d5fa;
 }
