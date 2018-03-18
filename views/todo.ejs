@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/todo.css" />
+    <title>Todo list</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="todolist not-done">
+                 <h1>Todos</h1>
+                    <input type="text" class="form-control add-todo" placeholder="Add todo press enter">
+
+                        <hr>
+                        <ul id="sortable" class="list-unstyled">
+                        <% for(let i = 0 ; i < todo.length ; i++ ){ %>
+                            <% if(todo[i].status == 0){ %>
+                        <li class="ui-state-default" id="<%= todo[i].key %>">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="<%= todo[i].key %>" /><%= todo[i].item %></label>
+                                    <button class="remove-item btn btn-default btn-xs pull-right" value="<%= todo[i].key %>"><span class="glyphicon glyphicon-remove"></span></button>
+                                    <button class="edit-item btn btn-default btn-xs pull-right" value="<%= todo[i].key %>"><span class="glyphicon glyphicon-pencil"></span></button>
+                            </div>
+                        </li>
+                        <% } %>
+                        <% } %>
+                    </ul>
+                    <div class="todo-footer">
+                        <strong><span class="count-todos"></span></strong> Items Left
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="todolist">
+                 <h1>Done</h1>
+                    <ul id="done-items" class="list-unstyled">
+                        <% for(let i = 0 ; i < todo.length ; i++ ){ %>
+                            <% if(todo[i].status == 1){ %>
+                        <li><%= todo[i].item %><button class="btn btn-default btn-xs pull-right remove-item" value="<%= todo[i].key %>"><span class="glyphicon glyphicon-remove"></span></button></li>
+                        <% } %>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+$(document).ready(function() {
+
+        $("#sortable").sortable();
+        $("#sortable").disableSelection();
+
+        countTodos();
+
+
+        //create todo
+        $('body').on('keypress', '.add-todo' ,function (e) {
+          e.preventDefault
+          if (e.which == 13) {
+               if($(this).val() != ''){
+               var todo = $(this).val();
+                createTodo(todo);
+                setTimeout(
+                  function()
+                  {
+                      countTodos();
+                }, 300);
+               }else{
+                   // some validation
+               }
+          }
+        });
+        $('body').on('keypress', '.edit-todo' ,function (e) {
+          e.preventDefault
+          if (e.which == 13) {
+               if($(this).val() != ''){
+               var todo = $(this).val();
+               var name = $(this).attr("name");
+                console.log(name);
+                $('#'+name).empty();
+                $('#'+name).append('<div class="checkbox"><label><input type="checkbox" value="'+name+'" />'+todo+'</label><button class="remove-item btn btn-default btn-xs pull-right" value="'+name+'"><span class="glyphicon glyphicon-remove"></span></button><button class="edit-item btn btn-default btn-xs pull-right" value="'+name+'"><span class="glyphicon glyphicon-pencil"></span></button></div>');
+                let data = {
+                    key: name,
+                    item: todo,
+                    status: 0
+                };
+                console.log(data);
+                $.post('/ajax_change_text', data, function(rtn){
+                    if(rtn.status){
+                    }
+                });
+                $(this).remove();
+               }else{
+                   // some validation
+               }
+          }
+        });
+        // mark task as done
+        $('body').on('change','#sortable li input[type="checkbox"]',function(){
+            if($(this).prop('checked')){
+                let key = $(this).val();
+                var doneItem = $(this).parent().parent().find('label').text();
+                $(this).parent().parent().parent().addClass('remove');
+                done(doneItem,key);
+                setTimeout(
+                  function()
+                  {
+                      countTodos();
+                }, 300);
+            }
+        });
+
+        //delete done task from "already done"
+        $('body').on('click','.remove-item',function(){
+            console.log($(this).val());
+            let data = {
+                key: $(this).val()
+            };
+            $.post('/ajax_delete_todo', data, function(rtn){
+                if(rtn.status){
+                }
+            });
+            $('#'+$(this).val()).remove();
+            removeItem(this);
+            setTimeout(
+              function()
+              {
+                  countTodos();
+            }, 300);
+        });
+
+        $('body').on('click', '.edit-item', function(){
+            if($('.edit-todo').length == 0){
+                $(this).append('<input type="text" name="'+$(this).val()+'" class="form-control edit-todo" placeholder="Edit todo press enter">');
+            }
+        })
+
+        // count tasks
+        function countTodos(){
+            var count = $("#sortable li").length;
+            $('.count-todos').html(count);
+        }
+
+        //create task
+        function createTodo(text){
+            let data = {
+                item: text,
+                status: 0
+            };
+            $.post('/ajax_add_todo', data, function(rtn) {
+                 if (rtn.status){
+                     console.log(rtn.msg);
+                     var markup = '<li class="ui-state-default" id="'+rtn.todo.key+'"><div class="checkbox"><label><input type="checkbox"  value="'+rtn.todo.key+'" />'+ text +'</label><button class="btn btn-default btn-xs pull-right remove-item" value="'+rtn.todo.key+'"><span class="glyphicon glyphicon-remove"></span></button><button class="edit-item btn btn-default btn-xs pull-right" value="'+rtn.todo.key+'"></span><span class="glyphicon glyphicon-pencil"></span></button></div></li>';
+                     $('#sortable').append(markup);
+                     $('.add-todo').val('');
+                 } else{
+                 }
+             });
+        }
+
+        //mark task as done
+        function done(doneItem, key){
+            var done = doneItem;
+            let data = {
+                key: key,
+                item: done,
+                status: 1
+            };
+            $.post('/ajax_change_status', data, function(rtn){
+                if(rtn.status){
+                    $('.remove').remove();
+                }
+            });
+            var markup = '<li>'+ done +'<button class="btn btn-default btn-xs pull-right remove-item" value="'+key+'"><span class="glyphicon glyphicon-remove"></span></button></li>';
+            $('#done-items').append(markup);
+        }
+
+        //mark all tasks as done
+
+
+        //remove done task from list
+        function removeItem(element){
+            $(element).parent().remove();
+        }
+    });
+</script>

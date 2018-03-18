@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
+    <link rel="stylesheet" href="//brick.a.ssl.fastly.net/Roboto:400"/>
+
+</head>
+
+<body>
+    <div class="button" id="btn0">
+      <p>Rate Limiter</p>
+    </div>
+    <div class="button" id="btn1">
+      <p>Todo List</p>
+    </div>
+    <div class="button" id="btn2">
+      <p>Photo Uploader</p>
+    </div>
+
+
+</body>
+
+</html>
+<script>
+    $(document).ready(function() {
+
+        $('body').on('click', '#btn0', function() {
+          var duration = 0.3;
+          var delay = 0.08;
+          TweenMax.to($('#btn0'), duration, {scaleY: 1.6, ease: Expo.easeOut});
+          TweenMax.to($('#btn0'), duration, {scaleX: 1.2, scaleY: 1, ease: Back.easeOut, easeParams: [3], delay: delay});
+          TweenMax.to($('#btn0'), duration * 1.25, {scaleX: 1, scaleY: 1, ease: Back.easeOut, easeParams: [6], delay: delay * 3 });
+          setTimeout(
+            function()
+            {
+                window.location = '/api/';
+          }, 600);
+        });
+
+        $('body').on('click', '#btn1', function() {
+          var duration = 0.3;
+          var delay = 0.08;
+          TweenMax.to($('#btn1'), duration, {scaleY: 1.6, ease: Expo.easeOut});
+          TweenMax.to($('#btn1'), duration, {scaleX: 1.2, scaleY: 1, ease: Back.easeOut, easeParams: [3], delay: delay});
+          TweenMax.to($('#btn1'), duration * 1.25, {scaleX: 1, scaleY: 1, ease: Back.easeOut, easeParams: [6], delay: delay * 3 });
+          setTimeout(
+            function()
+            {
+                window.location = "/todo";
+          }, 600);
+        });
+
+        $('body').on('click', '#btn2', function() {
+          var duration = 0.3;
+          var delay = 0.08;
+          TweenMax.to($('#btn2'), duration, {scaleY: 1.6, ease: Expo.easeOut});
+          TweenMax.to($('#btn2'), duration, {scaleX: 1.2, scaleY: 1, ease: Back.easeOut, easeParams: [3], delay: delay});
+          TweenMax.to($('#btn2'), duration * 1.25, {scaleX: 1, scaleY: 1, ease: Back.easeOut, easeParams: [6], delay: delay * 3 });
+          setTimeout(
+            function()
+            {
+                window.location = "/upload";
+          }, 600);
+        });
+    });
+</script>

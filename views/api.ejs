@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>抽卡</title>
+</head>
+<body>
+    <button id="limit">抽卡</button>
+</body>
+</html>
+<script>
+    $(document).ready(function() {
+        $('body').on('click', '#limit', function(){
+            $.post('/api/get');
+        });
+    });
+
+</script>

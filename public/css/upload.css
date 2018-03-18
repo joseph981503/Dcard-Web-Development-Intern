@@ -1,0 +1,39 @@
+#picture {
+    width: 100%;
+    max-width: 800px;    
+}
+
+#canvas {
+   width:100%;
+   height:400px;
+  background-color: #ffffff;
+  cursor: default;
+}
+
+h3 {
+    color: #ffffff;
+}
+
+h4 {
+    color: #ffffff;
+}
+
+
+.mosaic-class{
+    margin-top: 10px;
+    max-width: 45%;
+    max-height: 45%;
+}
+
+.crop{
+    max-width: 60%
+}
+
+.original{
+    margin-top: 30px;
+    width:100%;
+    max-width: 800px;
+    height:600px;
+   cursor: default;
+   background-size: cover;
+}
