@@ -3,9 +3,9 @@ var router = express.Router();
 var RateLimit = require('express-rate-limit');
 var Limiter = new RateLimit({
   windowMs: 60*60*1000, // 1 hour window
-  max: 10, // start blocking after 5 requests
+  max: 1000, // start blocking after 1000 requests
   message: "Too many accounts created from this IP, please try again after an hour",
-  headers: 'X-RateLimit-Limit'
+
 });
 
 router.get('/', function(req, res) {

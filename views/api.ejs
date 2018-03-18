@@ -12,7 +12,9 @@
 <script>
     $(document).ready(function() {
         $('body').on('click', '#limit', function(){
-            $.post('/api/get');
+            $.post('/api/get', (rtn)=> {
+                comsole.log(rtn);
+            });
         });
     });
 
