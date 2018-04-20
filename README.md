@@ -1,6 +1,6 @@
 # Dcard-Web-Development-Intern
-  http://localhost:8000/
-  有3個button，分別連進不同作業 
+>>http://localhost:8000/
+>有3個button，分別連進不同作業 
   http://localhost:8000/api/
   有個抽卡的button，按下會送request，限制每個小時同個IP的請求數 不得超過1000。 
   http://localhost:8000/todo
